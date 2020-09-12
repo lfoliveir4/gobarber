@@ -4,6 +4,7 @@ import { startOfHour } from "date-fns";
 
 import Appointment from "../models/Appointment";
 import AppointmentsRepository from "../repositories/AppointmentsRepository";
+import AppError from "../errors/AppError";
 
 interface Request {
   provider_id: string;
@@ -21,7 +22,7 @@ class CreateAppointmentService {
     );
 
     if (findAppointmentInSameDate) {
-      throw Error("This appointment alerady book");
+      throw new AppError("This appointment alerady book", 400, "appointment");
     }
 
     const appointment = appointmentsRepository.create({
