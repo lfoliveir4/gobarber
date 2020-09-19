@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { IconBaseProps } from "react-icons";
+import { FiAlertCircle } from "react-icons/fi";
 
 import { useField } from "@unform/core";
 
@@ -22,13 +23,7 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
-  const {
-    clearError,
-    registerField,
-    fieldName,
-    error,
-    defaultValue,
-  } = useField(name);
+  const { registerField, fieldName, error, defaultValue } = useField(name);
 
   useEffect(() => {
     registerField({
@@ -48,7 +43,11 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   }, []);
 
   return (
-    <Styles.Container isFilled={isFilled} isFocused={isFocused}>
+    <Styles.Container
+      isErrored={!!error}
+      isFilled={isFilled}
+      isFocused={isFocused}
+    >
       {Icon && <Icon size={20} />}
       <input
         onFocus={handleInputFocus}
@@ -57,6 +56,12 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
         ref={inputRef}
         {...rest}
       />
+
+      {error && (
+        <Styles.Error title={error}>
+          <FiAlertCircle color="#c53030" size={20} />
+        </Styles.Error>
+      )}
     </Styles.Container>
   );
 };
