@@ -1,8 +1,9 @@
-import { hash } from "bcryptjs";
 import { injectable, inject } from "tsyringe";
 
 import User from "@modules/users/infra/typeorm/entities/User";
 import AppError from "@shared/errors/AppError";
+
+import InterfaceHashProvider from "../provider/HashProvider/models/InterfaceHashProvider";
 
 import InterfaceUsersRepository from "../repositories/InterfaceUsersRepository";
 
@@ -16,7 +17,10 @@ interface Request {
 class CreateUserService {
   constructor(
     @inject("UsersRepository")
-    private usersRepository: InterfaceUsersRepository
+    private usersRepository: InterfaceUsersRepository,
+
+    @inject("HashProvider")
+    private hashProvider: InterfaceHashProvider
   ) {}
 
   public async execute({ name, email, password }: Request): Promise<User> {
@@ -30,7 +34,7 @@ class CreateUserService {
       );
     }
 
-    const hashedPassword = await hash(password, 8);
+    const hashedPassword = await this.hashProvider.generatedHash(password);
 
     const user = await this.usersRepository.create({
       name,
