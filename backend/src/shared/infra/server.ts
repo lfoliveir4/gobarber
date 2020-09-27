@@ -1,12 +1,14 @@
 import "reflect-metadata";
 import express, { Request, Response, NextFunction } from "express";
 import "express-async-errors";
-import AppError from "./errors/AppError";
+
 import cors from "cors";
 
-import routes from "./routes";
-import createConnection from "./database/infra";
-import uploadConfig from "./config/upload";
+import routes from "./http/routes";
+import AppError from "@shared/errors/AppError";
+import createConnection from "@shared/infra/typeorm";
+import "@shared/container";
+import uploadConfig from "@config/upload";
 
 createConnection();
 
