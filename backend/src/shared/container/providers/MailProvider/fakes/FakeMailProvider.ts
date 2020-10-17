@@ -1,17 +1,10 @@
+import InterfaceSendMailDTO from "../dtos/InterfaceSendMailDTO";
 import InterfaceMailProvider from "../models/InterfaceMailProvider";
 
-interface Message {
-  to: string;
-  body: string;
-}
-
 export default class FakeMailProvider implements InterfaceMailProvider {
-  private message: Message[] = [];
+  private message: InterfaceSendMailDTO[] = [];
 
-  public async sendMail(to: string, body: string): Promise<void> {
-    this.message.push({
-      to,
-      body,
-    });
+  public async sendMail(message: InterfaceSendMailDTO): Promise<void> {
+    this.message.push(message);
   }
 }
