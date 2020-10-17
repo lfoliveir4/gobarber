@@ -2,10 +2,8 @@ import InterfaceMailTemplateProvider from "../models/InterfaceMailTemplateProvid
 import InterfaceParseMailTemplate from "../dtos/InterfaceParseMailTemplateDTO";
 
 class FakeMailTemplateProvider implements InterfaceMailTemplateProvider {
-  public async parse({
-    template,
-  }: InterfaceParseMailTemplate): Promise<string> {
-    return template;
+  public async parse(): Promise<string> {
+    return "mail content";
   }
 }
 
