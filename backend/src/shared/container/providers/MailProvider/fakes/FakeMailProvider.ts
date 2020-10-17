@@ -1,5 +1,4 @@
 import InterfaceMailProvider from "../models/InterfaceMailProvider";
-import IntefaceMailProvider from "../models/InterfaceMailProvider";
 
 interface Message {
   to: string;
