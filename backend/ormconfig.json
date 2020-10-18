@@ -1,14 +1,27 @@
-{
-  "type": "",
-  "host": "",
-  "port": "",
-  "username": "",
-  "password": "",
-  "database": "",
-  "entities": [""],
-  "migrations": [""],
-  "cli": {
-    "migrationsDir": ""
+[
+  {
+    "name": "default",
+    "type": "",
+    "host": "",
+    "port": ,
+    "username": "",
+    "password": "",
+    "database": "",
+    "entities": [""],
+    "migrations": [""],
+    "cli": {
+      "migrationsDir": ""
+    },
+    "logging": true
   },
-  "logging": true
-}
+  {
+    "name": "mongo",
+    "type": "",
+    "host": "",
+    "port": ,
+    "database": "",
+    "useUnifiedTopology": ,
+    "entities": [""],
+    "logging": true
+  }
+]

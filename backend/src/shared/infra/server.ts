@@ -4,13 +4,11 @@ import "express-async-errors";
 
 import cors from "cors";
 
+import "@shared/infra/typeorm";
 import routes from "./http/routes";
 import AppError from "@shared/errors/AppError";
-import createConnection from "@shared/infra/typeorm";
 import "@shared/container";
 import uploadConfig from "@config/upload";
-
-createConnection();
 
 const app = express();
 
