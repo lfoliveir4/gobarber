@@ -1,14 +1,14 @@
 {
-  "type": "postgres",
-  "host": "localhost",
-  "port": 5432,
-  "username": "postgres",
-  "password": "docker",
-  "database": "gobarber",
-  "entities": ["./src/modules/**/infra/typeorm/entities/*.ts"],
-  "migrations": ["./src/shared/infra/typeorm/migrations/*.ts"],
+  "type": "",
+  "host": "",
+  "port": "",
+  "username": "",
+  "password": "",
+  "database": "",
+  "entities": [""],
+  "migrations": [""],
   "cli": {
-    "migrationsDir": "./src/shared/infra/typeorm/migrations/*.ts"
+    "migrationsDir": ""
   },
   "logging": true
 }
