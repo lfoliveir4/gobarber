@@ -6,6 +6,7 @@ node_modules
 /.pnp
 .pnp.js
 
+
 # testing
 /coverage
 
@@ -16,7 +17,9 @@ tmp/
 !tmp/.gitkeep
 
 # misc
+ormconfig.json
 .DS_Store
+.env
 .env.localg
 .env.development.local
 .env.test.local
