@@ -11,7 +11,7 @@ import uploadConfig from "@config/upload";
 const usersRouter = Router();
 const usersContoller = new UsersContoller();
 const userAvatarController = new UserAvatarController();
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 
 usersRouter.post(
   "/",

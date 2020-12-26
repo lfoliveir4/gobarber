@@ -7,6 +7,7 @@ import cors from "cors";
 import { errors } from "celebrate";
 
 import "@shared/infra/typeorm";
+import rateLimiter from "./http/middlewares/rateLimiter";
 import routes from "./http/routes";
 import AppError from "@shared/errors/AppError";
 import "@shared/container";
@@ -14,6 +15,7 @@ import uploadConfig from "@config/upload";
 
 const app = express();
 
+app.use(rateLimiter);
 app.use(cors());
 app.use(express.json());
 app.use("/files", express.static(uploadConfig.uploadsFolder));
