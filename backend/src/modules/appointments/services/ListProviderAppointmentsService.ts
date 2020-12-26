@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { getDaysInMonth, getDate } from "date-fns";
+import { classToClass } from "class-transformer";
 
 import Appointment from "../infra/typeorm/entities/Appointment";
 import InterfaceAppointmentsRepository from "../repositories/InterfaceAppointmentsRepository";
@@ -45,7 +45,7 @@ class ListProviderAppointmentsService {
         }
       );
 
-      await this.cacheProvider.save(cacheKey, appointments);
+      await this.cacheProvider.save(cacheKey, classToClass(appointments));
     }
 
     return appointments;
