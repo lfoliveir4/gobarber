@@ -35,19 +35,12 @@ class User {
 
   @Expose({ name: "avatar_url" })
   getAvatarUrl(): string {
-    if (!this.avatar) {
-      return null;
-    }
-
     switch (uploadConfig.driver) {
       case "disk":
         return `${process.env.APP_API_URL}/files/${this.avatar}`;
 
       case "s3":
         return `https://s3.amazonaws.com/${uploadConfig.config.aws.bucket}/${this.avatar}`;
-
-      default:
-        return null;
     }
   }
 }
