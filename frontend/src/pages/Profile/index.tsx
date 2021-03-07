@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { ChangeEvent, useCallback, useRef } from "react";
 import { FiArrowLeft, FiMail, FiUser, FiLock, FiCamera } from "react-icons/fi";
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
@@ -15,12 +15,14 @@ import { useToast } from "../../context/ToastContext";
 
 import GetValidationErrors from "../../utils/GetValidationErrors";
 
-import * as Styles from "./styles";
+import { AvatarInput, Container, Content } from "./styles";
 
 interface ProfileFormData {
   name: string;
   email: string;
+  old_password: string;
   password: string;
+  password_confirmation: string;
 }
 
 const Profile: React.FC = () => {
@@ -30,7 +32,7 @@ const Profile: React.FC = () => {
 
   const history = useHistory();
 
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
 
   const handleSubmit = useCallback(
     async (data: ProfileFormData) => {
@@ -43,21 +45,55 @@ const Profile: React.FC = () => {
           email: Yup.string()
             .required("Email obrigatório")
             .email("Digite um email válido"),
-          password: Yup.string().min(6, "No minimo 6 digitos"),
+          old_password: Yup.string(),
+          password: Yup.string().when("old_password", {
+            is: (val) => !!val.length,
+            then: Yup.string().required("Campo obrigatório"),
+            otherwise: Yup.string(),
+          }),
+          password_confirmation: Yup.string()
+            .when("old_password", {
+              is: (val) => !!val.length,
+              then: Yup.string().required("Campo obrigatório"),
+              otherwise: Yup.string(),
+            })
+            .oneOf([Yup.ref("password"), undefined], "Confirmação incorreta"),
         });
 
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        await api.post("/users", data);
+        const {
+          name,
+          email,
+          old_password,
+          password,
+          password_confirmation,
+        } = data;
 
-        history.push("/");
+        const formData = Object.assign(
+          { name, email },
+          old_password
+            ? {
+                old_password,
+                password,
+                password_confirmation,
+              }
+            : {}
+        );
+
+        const response = await api.put("/profile", formData);
+
+        updateUser(response.data);
+
+        history.push("/dashboard");
 
         addToast({
           type: "success",
-          title: "Cadastro realizado",
-          description: "Voce ja pode fazer seu logon no Gobarber",
+          title: "Perfil Aualizado",
+          description:
+            "Suas informações do perfil foram atualizadas com sucesso!",
         });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -69,16 +105,32 @@ const Profile: React.FC = () => {
 
         addToast({
           type: "error",
-          title: "Erro no cadastro",
-          description: "Ocorreu um erro ao fazer cadastro, tente novamente",
+          title: "Erro na atualização",
+          description: "Ocorreu um erro ao atualizar perfil, tente novamente",
         });
       }
     },
     [addToast, history]
   );
 
+  const handleAvatarChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files) {
+        const data = new FormData();
+
+        data.append("avatar", event.target.files[0]);
+
+        api.patch("/users/avatar", data).then((response) => {
+          updateUser(response.data);
+          addToast({ type: "success", title: "Avatar atualizado" });
+        });
+      }
+    },
+    [addToast, updateUser]
+  );
+
   return (
-    <Styles.Container>
+    <Container>
       <header>
         <div>
           <Link to="/">
@@ -87,18 +139,25 @@ const Profile: React.FC = () => {
         </div>
       </header>
 
-      <Styles.Content>
+      <Content>
         <Form
           ref={formRef}
           initialData={{ name: user.name, email: user.email }}
           onSubmit={handleSubmit}
         >
-          <Styles.AvatarInput>
+          <AvatarInput>
             <img src={user.avatar_url} alt={user.name} />
-            <button type="button">
+            <label htmlFor="avatar">
               <FiCamera />
-            </button>
-          </Styles.AvatarInput>
+
+              <input
+                type="file"
+                name=""
+                id="avatar"
+                onChange={handleAvatarChange}
+              />
+            </label>
+          </AvatarInput>
 
           <h1>Meu perfil</h1>
 
@@ -129,8 +188,8 @@ const Profile: React.FC = () => {
 
           <Button type="submit">Confirmar mudanças</Button>
         </Form>
-      </Styles.Content>
-    </Styles.Container>
+      </Content>
+    </Container>
   );
 };
 

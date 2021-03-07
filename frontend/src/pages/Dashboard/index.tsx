@@ -133,6 +133,7 @@ const Dashboard: React.FC = () => {
   }, [appointments]);
 
   console.log("appoit morning", morningAppointments);
+  console.log("appoit after", afternoonAppointments);
 
   return (
     <Container>
