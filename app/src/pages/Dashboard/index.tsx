@@ -28,7 +28,7 @@ export interface Provider {
 }
 
 const Dashboard: React.FC = () => {
-  const { signOut, user } = useAuth();
+  const { user, signOut } = useAuth();
   const navigation = useNavigation();
 
   const [providers, setProviders] = useState<Provider[]>([]);
@@ -37,14 +37,9 @@ const Dashboard: React.FC = () => {
     api.get(`providers`).then((response) => setProviders(response.data));
   }, []);
 
-  // const navigateToProfile = useCallback(() => navigation.navigate('Profile'), [
-  //   navigation,
-  // ]);
-
-  // const navigateToAppointmentCreate = useCallback(
-  //   () => navigation.navigate('Profile'),
-  //   [navigation],
-  // );
+  const navigateToProfile = useCallback(() => navigation.navigate('Profile'), [
+    navigation,
+  ]);
 
   const navigateToAppointmentCreate = useCallback(
     (providerId: string) =>
@@ -60,11 +55,10 @@ const Dashboard: React.FC = () => {
           <UserName>{user.name}</UserName>
         </HeaderTitle>
 
-        <ProfileButton onPress={() => navigateToProfile}>
+        <ProfileButton onPress={() => navigateToProfile()}>
           <UserAvatar
             source={{
-              uri:
-                'https://raw.githubusercontent.com/Ashwinvalento/cartoon-avatar/master/lib/images/female/68.png',
+              uri: user.avatar_url,
             }}
           />
         </ProfileButton>
@@ -81,8 +75,7 @@ const Dashboard: React.FC = () => {
             onPress={() => navigateToAppointmentCreate(item.id)}>
             <ProviderAvatar
               source={{
-                uri:
-                  'https://raw.githubusercontent.com/Ashwinvalento/cartoon-avatar/master/lib/images/female/68.png',
+                uri: item.avatar_url,
               }}
             />
 

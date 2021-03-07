@@ -6,14 +6,15 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import {TextInputProps} from 'react-native';
-import {useField} from '@unform/core';
+import { TextInputProps } from 'react-native';
+import { useField } from '@unform/core';
 
-import * as Styles from './styles';
+import { Container, Icon, TextInput } from './styles';
 
 interface InputProps extends TextInputProps {
   name: string;
   icon: string;
+  containerStyle?: {};
 }
 
 interface InputValueReference {
@@ -25,16 +26,20 @@ interface InputRef {
 }
 
 const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
-  {name, icon, ...rest},
+  { name, icon, containerStyle = {}, ...rest },
   ref,
 ) => {
   const inputElementRef = useRef<any>(null);
 
-  const {clearError, fieldName, registerField, error, defaultValue} = useField(
-    name,
-  );
+  const {
+    clearError,
+    fieldName,
+    registerField,
+    error,
+    defaultValue,
+  } = useField(name);
 
-  const inputValueRef = useRef<InputValueReference>({value: defaultValue});
+  const inputValueRef = useRef<InputValueReference>({ value: defaultValue });
 
   const [isFocused, setIsFocused] = useState(false);
 
@@ -64,7 +69,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
       path: 'value',
       setValue(ref: any, value) {
         inputValueRef.current.value = value;
-        inputElementRef.current.setNativeProps({text: value});
+        inputElementRef.current.setNativeProps({ text: value });
       },
 
       clearValue() {
@@ -75,14 +80,14 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
   }, [fieldName, registerField]);
 
   return (
-    <Styles.Container isFocused={isFocused} isErrored={!!error}>
-      <Styles.Icon
+    <Container style={containerStyle} isFocused={isFocused} isErrored={!!error}>
+      <Icon
         name={icon}
         size={20}
         color={isFocused || isFilled ? '#ff9000' : '#666360'}
       />
 
-      <Styles.TextInput
+      <TextInput
         ref={inputElementRef}
         keyboardAppearance="dark"
         placeholderTextColor="#666360"
@@ -94,7 +99,7 @@ const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = (
         }}
         {...rest}
       />
-    </Styles.Container>
+    </Container>
   );
 };
 
