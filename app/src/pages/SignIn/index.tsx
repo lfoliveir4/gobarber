@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -9,10 +9,10 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import {useNavigation} from '@react-navigation/native';
-import {Form} from '@unform/mobile';
-import {FormHandles} from '@unform/core';
-import {useAuth} from '../../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
+import { useAuth } from '../../context/AuthContext';
 
 import GetValidationErrors from '../../utils/GetValidationErrors';
 
@@ -37,7 +37,7 @@ const SignIn: React.FC = () => {
 
   const formRef = useRef<FormHandles>(null);
 
-  const {signIn, user} = useAuth();
+  const { signIn, user } = useAuth();
 
   console.log(user);
 
@@ -56,7 +56,7 @@ const SignIn: React.FC = () => {
           abortEarly: false,
         });
 
-        await signIn({email: data.email, password: data.password});
+        await signIn({ email: data.email, password: data.password });
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = GetValidationErrors(error);
@@ -78,11 +78,11 @@ const SignIn: React.FC = () => {
     <>
       <KeyboardAvoidingView
         enabled
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{flex: 1}}>
+          contentContainerStyle={{ flex: 1 }}>
           <Styles.Container>
             <Image source={logo} />
 
